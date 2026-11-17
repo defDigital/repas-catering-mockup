@@ -1,0 +1,8 @@
+[
+  {"id": "receptie", "titel": "Receptie", "tekst": "Verfijnde hapjes die rondgaan terwijl je gasten elkaar ontmoeten.", "foto": "../assets/foto/home-box2-2.jpg", "fotoAlt": "Hapjes met zalm op een dienblad tijdens een receptie", "volgorde": 1},
+  {"id": "walking-dinner", "titel": "Walking dinner", "tekst": "Kleine gerechten na elkaar, staand of als walking buffet. Ideaal om te netwerken.", "foto": "../assets/foto/home-section1-4.jpg", "fotoAlt": "Een lange rij bordjes klaar om uit te serveren", "volgorde": 2},
+  {"id": "seated-dinner", "titel": "Diner aan tafel", "tekst": "Drie of vier gangen, geserveerd aan tafel door ons eigen team.", "foto": "../assets/foto/home-box1.jpg", "fotoAlt": "Gedekte ronde tafels in een feestzaal met kroonluchters", "volgorde": 3},
+  {"id": "live-cooking", "titel": "Live cooking", "tekst": "De keuken tussen je gasten. Koken wordt zo een deel van het feest.", "foto": "../assets/foto/home-header.jpg", "fotoAlt": "Een chef werkt borden af met een saus uit een knijpfles", "volgorde": 4},
+  {"id": "foodcorners", "titel": "Foodcorners", "tekst": "Geen burgerstand, wel een uitgeholde parmezaan met pasta en zwarte truffel.", "volgorde": 5},
+  {"id": "fine-dining", "titel": "Fine dining", "tekst": "Nog een niveau hoger, met de sterrenchefs van Repas Exclusive.", "foto": "../assets/foto/home-section1-3.jpg", "fotoAlt": "Fijn dessert op een donker bord met reliëf", "link": "https://www.repascatering.be/exclusive/", "volgorde": 6}
+]

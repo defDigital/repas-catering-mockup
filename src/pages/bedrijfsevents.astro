@@ -1,0 +1,301 @@
+---
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import Basis from '../layouts/Basis.astro';
+
+import heroFoto from '../assets/foto/home-section2-3.jpg';
+import belofteFoto from '../assets/foto/home-section2-1.jpg';
+import belevingFoto from '../assets/foto/home-box2-1.jpg';
+import babbelFoto from '../assets/foto/contactbanner-bg.jpg';
+
+const opVolgorde = (a: { data: { volgorde: number } }, b: { data: { volgorde: number } }) =>
+  a.data.volgorde - b.data.volgorde;
+const gelegenheden = (await getCollection('gelegenheden')).sort(opVolgorde);
+const formules = (await getCollection('formules')).sort(opVolgorde);
+const [citaat] = await getCollection('getuigenissen');
+
+// Klantlogo's van de huidige site. Alt-tekst = bedrijfsnaam.
+const logos = [
+  { src: '/logos/deloitte.png', alt: 'Deloitte', w: 202, h: 52 },
+  { src: '/logos/belfius.png', alt: 'Belfius', w: 212, h: 54 },
+  { src: '/logos/mercedesbenz.png', alt: 'Mercedes-Benz', w: 200, h: 126 },
+  { src: '/logos/aveve.png', alt: 'Aveve', w: 200, h: 118 },
+  { src: '/logos/tessenderlo.png', alt: 'Tessenderlo', w: 202, h: 30 },
+  { src: '/logos/technopolis.png', alt: 'Technopolis', w: 200, h: 57 },
+  { src: '/logos/thomasmore.png', alt: 'Thomas More', w: 200, h: 80 },
+  { src: '/logos/cionet.png', alt: 'Cionet', w: 200, h: 60 },
+  { src: '/logos/logo-kvm.svg', alt: 'KV Mechelen', w: 182, h: 250 },
+];
+
+---
+
+<Basis
+  titel="Catering voor bedrijfsevents | Repas Catering"
+  omschrijving="Catering voor je personeelsfeest, opening, congres of beurs. Repas denkt mee, kan groot aan en blijft flexibel. Vraag vrijblijvend een offerte aan."
+>
+  <!-- Hero -->
+  <section class="rp-hero">
+    <div class="rp-container rp-hero_grid">
+      <div class="rp-hero_tekst">
+        <p class="rp-hero_label">Bedrijfsevents</p>
+        <h1 class="rp-hero_titel">Catering voor bedrijfsevents</h1>
+        <p class="rp-hero_intro">
+          Personeelsfeest, opening of congres. Wij denken mee, van de eerste babbel tot de laatste gast.
+        </p>
+      </div>
+      <div class="rp-hero_foto">
+        <Image
+          src={heroFoto}
+          alt="Een ober serveert borden aan een feestelijk gedekte tafel tijdens een event"
+          widths={[480, 760]}
+          sizes="(max-width: 991px) 90vw, 560px"
+          loading="eager"
+          fetchpriority="high"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo's -->
+  <section class="rp-logos" aria-labelledby="logos-titel">
+    <div class="rp-container">
+      <h2 class="rp-logos_titel" id="logos-titel">Zij gingen je voor</h2>
+      <ul class="rp-logos_rij">
+        {logos.map((l) => (
+          <li><img src={l.src} alt={l.alt} width={l.w} height={l.h} loading="lazy" /></li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <!-- Belofte -->
+  <section class="rp-belofte">
+    <div class="rp-container rp-belofte_grid">
+      <div class="rp-belofte_foto">
+        <Image
+          src={belofteFoto}
+          alt="Het team van Repas krijgt een briefing voor de start van een event"
+          widths={[480, 760, 1100]}
+          sizes="(max-width: 991px) 85vw, 480px"
+        />
+      </div>
+      <div class="rp-belofte_kaart">
+        <h2 class="rp-belofte_titel">Groot aankunnen, en toch flexibel</h2>
+        <p>
+          Je wilt geen standaardpakket. Wij ook niet. <strong>We kunnen grote events aan en blijven toch wendbaar.</strong>
+        </p>
+        <p>
+          Geen vast concept waar je in moet passen. Wel een voorstel dat bij jouw event, je gasten en je budget past.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gelegenheden -->
+  <section class="rp-gelegenheden" aria-labelledby="gelegenheden-titel">
+    <div class="rp-container">
+      <div class="rp-sectiekop">
+        <h2 class="rp-sectiekop_titel" id="gelegenheden-titel">Voor elk zakelijk moment</h2>
+        <p class="rp-sectiekop_tekst">
+          Of je nu je team bedankt of klanten ontvangt op je stand: we zorgen voor eten dat bij de gelegenheid past.
+        </p>
+      </div>
+      <ol class="rp-gelegenheden_lijst">
+        {gelegenheden.map((g, i) => (
+          <li class="rp-gelegenheid">
+            <span class="rp-gelegenheid_nr" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+            <h3 class="rp-gelegenheid_titel">{g.data.titel}</h3>
+            <p class="rp-gelegenheid_tekst">{g.data.tekst}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <!-- Formules -->
+  <section class="rp-formules" aria-labelledby="formules-titel">
+    <div class="rp-container">
+      <div class="rp-sectiekop">
+        <h2 class="rp-sectiekop_titel" id="formules-titel">Wat we serveren</h2>
+        <p class="rp-sectiekop_tekst">
+          Van een receptie met hapjes tot een diner van vier gangen. Alles wordt in onze eigen keukens bereid.
+        </p>
+      </div>
+      <div class="rp-formules_grid">
+        {formules.map((f) => (
+          <article class:list={['rp-formule', { 'rp-formule--zonderfoto': !f.data.foto }]}>
+            {f.data.foto && (
+              <div class="rp-formule_foto">
+                <Image src={f.data.foto} alt={f.data.fotoAlt ?? ''} widths={[400, 700]} sizes="(max-width: 767px) 90vw, (max-width: 991px) 45vw, 340px" />
+              </div>
+            )}
+            <h3 class="rp-formule_titel">{f.data.titel}</h3>
+            <p class="rp-formule_tekst">{f.data.tekst}</p>
+            {f.data.link && (
+              <a class="rp-formule_link rp-tekstlink" href={f.data.link}>Ontdek Repas Exclusive</a>
+            )}
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Beleving -->
+  <section class="rp-beleving">
+    <div class="rp-container rp-beleving_grid">
+      <div class="rp-beleving_kaart">
+        <h2 class="rp-beleving_titel">Het draait om beleving</h2>
+        <p>
+          Een chef die zijn gerecht komt toelichten. Live cooking tussen je gasten. Zulke momenten blijven hangen, en ze
+          hoeven niet altijd veel te kosten. Daarom zoeken we ook de samenwerking op met bekende Belgische chefs.
+        </p>
+      </div>
+      <div class="rp-beleving_foto">
+        <Image
+          src={belevingFoto}
+          alt="Champagne wordt ingeschonken in twee glazen"
+          widths={[400, 760]}
+          sizes="(max-width: 991px) 80vw, 420px"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Waarom -->
+  <section class="rp-waarom" aria-labelledby="waarom-titel">
+    <div class="rp-container">
+      <div class="rp-sectiekop">
+        <h2 class="rp-sectiekop_titel" id="waarom-titel">Waarom Repas</h2>
+      </div>
+      <div class="rp-waarom_grid">
+        <div class="rp-reden">
+          <h3 class="rp-reden_titel">We denken mee</h3>
+          <p class="rp-reden_tekst">
+            Klanten noemen het een verademing. We komen zelf met voorstellen en zoeken oplossingen, ook als het budget
+            per event verschilt.
+          </p>
+        </div>
+        <div class="rp-reden">
+          <h3 class="rp-reden_titel">Twintig jaar ervaring</h3>
+          <p class="rp-reden_tekst">Onze naam klinkt in de cateringwereld. Je weet wat je krijgt.</p>
+        </div>
+        <div class="rp-reden">
+          <h3 class="rp-reden_titel">Alles geregeld</h3>
+          <p class="rp-reden_tekst">
+            Opgeleid personeel, hulp bij de locatie en vaste partners voor aankleding, meubilair, licht, geluid en bloemen.
+          </p>
+        </div>
+        <div class="rp-reden">
+          <h3 class="rp-reden_titel">Echte keuken</h3>
+          <p class="rp-reden_tekst">
+            Seizoensgebonden en onbewerkte producten, zo kort mogelijk in de keten. Zero waste en zonder plastic.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Citaat -->
+  <section class="rp-citaat" aria-label="Wat klanten zeggen">
+    <div class="rp-container">
+      <figure class="rp-citaat_blok">
+        <blockquote class="rp-citaat_tekst">“{citaat.data.citaat}”</blockquote>
+        <figcaption class="rp-citaat_bron">
+          <strong>{citaat.data.naam}</strong>, {citaat.data.functie}, {citaat.data.bedrijf}
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Werkwijze + werkgebied -->
+  <section class="rp-werkwijze" aria-labelledby="werkwijze-titel">
+    <div class="rp-container">
+      <div class="rp-sectiekop">
+        <h2 class="rp-sectiekop_titel" id="werkwijze-titel">Zo gaat het</h2>
+      </div>
+      <ol class="rp-werkwijze_stappen">
+        <li class="rp-stap">
+          <span class="rp-stap_nr" aria-hidden="true">1</span>
+          <h3 class="rp-stap_titel">Een vrijblijvende babbel</h3>
+          <p class="rp-stap_tekst">Je vertelt over je event, je gasten en wat je voor ogen hebt.</p>
+        </li>
+        <li class="rp-stap">
+          <span class="rp-stap_nr" aria-hidden="true">2</span>
+          <h3 class="rp-stap_titel">Een voorstel op maat</h3>
+          <p class="rp-stap_tekst">We komen met een voorstel, en met ideeën waar je zelf nog niet aan dacht.</p>
+        </li>
+        <li class="rp-stap">
+          <span class="rp-stap_nr" aria-hidden="true">3</span>
+          <h3 class="rp-stap_titel">Wij regelen de rest</h3>
+          <p class="rp-stap_tekst">Op de dag zelf zorgt ons team ervoor dat alles vlot verloopt.</p>
+        </li>
+      </ol>
+
+      <div class="rp-werkgebied">
+        <h3 class="rp-werkgebied_titel">Waar we werken</h3>
+        <div class="rp-werkgebied_tekst">
+          <p>
+            In heel België. Het meeste tussen Gent, Antwerpen en Brussel, maar evengoed in Oostende of Hasselt.
+          </p>
+          <p>
+            Nog geen locatie? <a class="rp-tekstlink" href="https://www.repascatering.be/locaties/">Bekijk onze partnerlocaties</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Babbel: overgenomen van de live site (#babbel) -->
+  <section class="rp-babbel" aria-labelledby="babbel-titel">
+    <Image
+      class="rp-babbel_foto"
+      src={babbelFoto}
+      alt=""
+      widths={[700, 1000, 1400]}
+      sizes="(max-width: 767px) 90vw, 50vw"
+    />
+    <div class="rp-container rp-babbel_binnen">
+      <h2 class="rp-babbel_titel" id="babbel-titel">Elk project begint met een vrijblijvende babbel.</h2>
+      <div class="rp-babbel_kolommen">
+        <div class="rp-babbel_kolom">
+          <p>Een verkennend gesprek?<br />Klinkt goed!</p>
+        </div>
+        <div class="rp-babbel_kolom">
+          <p>Ik wil graag nog wat ontdekken, zoals...</p>
+          <ul class="rp-babbel_lijst">
+            <li><a href="https://www.repascatering.be/locaties/">Onze vaste locaties</a></li>
+            <li><a href="https://www.repascatering.be/fotos/">Referentiefoto's</a></li>
+            <li><a href="https://www.repascatering.be/exclusive/">Onze high-end cateringdienst “Repas Exclusive”</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact: overgenomen van de live site (#contact), zelfde vier velden -->
+  <section class="rp-contact" id="contact" aria-labelledby="contact-titel">
+    <div class="rp-container rp-contact_grid">
+      <div class="rp-contact_tekst">
+        <h2 class="rp-contact_titel" id="contact-titel">Feest <span>Vertel ons erover!</span></h2>
+        <p>We nemen zo snel mogelijk contact met je op!</p>
+        <p>
+          ...of neem zelf contact op<br />
+          <a href="tel:+3215424344">015&nbsp;42&nbsp;43&nbsp;44</a><br />
+          <a href="mailto:info@repascatering.be">info@repascatering.be</a>
+        </p>
+      </div>
+
+      <form class="rp-contactform" action="/bedankt" method="get">
+        <label class="rp-verborgen" for="naam">Naam</label>
+        <input class="rp-contactform_veld" id="naam" name="naam" type="text" placeholder="naam" autocomplete="name" />
+        <label class="rp-verborgen" for="email">E-mail (verplicht)</label>
+        <input class="rp-contactform_veld" id="email" name="email" type="email" placeholder="e-mail*" autocomplete="email" required />
+        <label class="rp-verborgen" for="tel">Telefoon (verplicht)</label>
+        <input class="rp-contactform_veld" id="tel" name="tel" type="tel" placeholder="tel*" autocomplete="tel" required />
+        <label class="rp-verborgen" for="bericht">Bericht</label>
+        <textarea class="rp-contactform_veld" id="bericht" name="bericht" rows="5" placeholder="bericht"></textarea>
+        <button class="rp-knop rp-knop--zonderpijl rp-contactform_knop" type="submit">contacteer mij</button>
+      </form>
+    </div>
+  </section>
+</Basis>

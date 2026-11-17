@@ -1,0 +1,1066 @@
+/*
+ * Repas Catering, pagina Bedrijfsevents.
+ * Nagebouwd op de stijl van repascatering.be: lichtgrijs vlak in een zwart
+ * kader, Playfair voor alles, zwarte knoppen met een lange pijl, witte en
+ * zwarte kaarten die over een foto heen schuiven.
+ *
+ * Benoemde classes met prefix rp-, dan BEM. Breakpoints 991, 767 en 479.
+ *
+ * Contrast (nagerekend, WCAG 2.1):
+ *   --rp-inkt  #000    op --rp-vlak #EEE   18,1 : 1
+ *   --rp-zacht #4A4A4A op --rp-vlak #EEE    7,6 : 1
+ *   --rp-zacht #4A4A4A op #FFF              8,9 : 1
+ *   #FFF op #000                           21,0 : 1
+ *   #BDBDBD op #000 (tekst op zwart vlak)   5,5 : 1
+ *   #8A8A8A op #000 (onderlijn velden)      6,1 : 1  (UI, eis 3 : 1)
+ */
+
+:root {
+  --rp-inkt: #000;
+  --rp-vlak: #eee;
+  --rp-wit: #fff;
+  --rp-zacht: #4a4a4a;
+  --rp-zacht-op-zwart: #bdbdbd;
+  --rp-lijn: #cfcfcf;
+  --rp-kop: 'Playfair Display', Georgia, serif;
+  --rp-tekst: 'Playfair Variable', Georgia, serif;
+  --rp-kader: 35px;
+  --rp-schaduw: 0 30px 60px rgba(0, 0, 0, 0.12);
+  --rp-breed: 1180px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 130px;
+}
+
+body {
+  margin: 0;
+  background: var(--rp-inkt);
+  color: var(--rp-inkt);
+  font-family: var(--rp-tekst);
+  font-size: 17px;
+  line-height: 1.6;
+  font-optical-sizing: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--rp-kop);
+  font-weight: 400;
+  line-height: 1.12;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--rp-inkt);
+  outline-offset: 3px;
+}
+
+.rp-skip {
+  position: absolute;
+  left: 50px;
+  top: -100px;
+  z-index: 100;
+  background: var(--rp-wit);
+  padding: 12px 18px;
+}
+.rp-skip:focus {
+  top: 50px;
+}
+
+/* ---------- kader ---------- */
+
+.rp-kader {
+  margin: var(--rp-kader);
+  background: var(--rp-vlak);
+}
+
+.rp-container {
+  max-width: var(--rp-breed);
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+/* ---------- knoppen ---------- */
+
+.rp-knop {
+  display: inline-flex;
+  align-items: center;
+  gap: 18px;
+  min-height: 48px;
+  padding: 10px 24px;
+  background: var(--rp-inkt);
+  color: var(--rp-wit);
+  font-family: var(--rp-kop);
+  font-size: 18px;
+  text-decoration: none;
+  border: 2px solid var(--rp-inkt);
+  transition: background 0.2s, color 0.2s;
+}
+.rp-knop::after {
+  content: '⟶';
+  font-family: system-ui, sans-serif;
+  transition: transform 0.2s;
+}
+.rp-knop:hover {
+  background: var(--rp-wit);
+  color: var(--rp-inkt);
+}
+.rp-knop:hover::after {
+  transform: translateX(4px);
+}
+.rp-knop--klein {
+  font-size: 16px;
+  padding: 8px 18px;
+  min-height: 44px;
+  gap: 12px;
+}
+
+.rp-tekstlink {
+  text-underline-offset: 4px;
+  text-decoration-thickness: 1px;
+}
+
+/* ---------- header ---------- */
+
+.rp-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--rp-vlak);
+}
+.rp-header_binnen {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 26px 70px 22px;
+}
+.rp-header_offerte {
+  justify-self: start;
+}
+.rp-header_logo {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  width: 180px;
+  color: var(--rp-inkt);
+}
+.rp-header_logo svg {
+  width: 100%;
+  height: auto;
+}
+
+/* Menu werkt zonder JavaScript via <details>. */
+.rp-menu {
+  justify-self: end;
+  position: relative;
+}
+.rp-menu_knop {
+  list-style: none;
+  cursor: pointer;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 7px;
+  padding: 0 4px;
+}
+.rp-menu_knop::-webkit-details-marker {
+  display: none;
+}
+.rp-menu_streep {
+  display: block;
+  height: 4px;
+  background: var(--rp-inkt);
+  transition: transform 0.2s, opacity 0.2s;
+}
+.rp-menu[open] .rp-menu_streep:nth-child(1) {
+  transform: translateY(11px) rotate(45deg);
+}
+.rp-menu[open] .rp-menu_streep:nth-child(2) {
+  opacity: 0;
+}
+.rp-menu[open] .rp-menu_streep:nth-child(3) {
+  transform: translateY(-11px) rotate(-45deg);
+}
+.rp-menu_paneel {
+  position: absolute;
+  right: 0;
+  top: 64px;
+  min-width: 260px;
+  background: var(--rp-inkt);
+  padding: 22px 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--rp-schaduw);
+}
+.rp-menu_paneel a {
+  color: var(--rp-wit);
+  text-decoration: none;
+  font-family: var(--rp-kop);
+  font-size: 24px;
+  padding: 8px 30px;
+  min-height: 44px;
+}
+.rp-menu_paneel a:hover,
+.rp-menu_paneel a[aria-current='page'] {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+  text-decoration-thickness: 1px;
+}
+.rp-menu_paneel a:focus-visible {
+  outline-color: var(--rp-wit);
+  outline-offset: -3px;
+}
+
+/* ---------- hero ---------- */
+
+.rp-hero {
+  padding: 70px 0 120px;
+}
+.rp-hero_grid {
+  display: grid;
+  grid-template-columns: 5fr 6fr;
+  align-items: center;
+}
+.rp-hero_tekst {
+  position: relative;
+  z-index: 2;
+  margin-right: -90px;
+}
+.rp-hero_label {
+  font-size: 14px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  margin-bottom: 26px;
+}
+.rp-hero_titel {
+  font-size: clamp(40px, 5.4vw, 78px);
+  line-height: 1.04;
+}
+.rp-hero_intro {
+  font-size: 20px;
+  max-width: 30ch;
+  margin: 30px 0 36px;
+}
+.rp-hero_foto {
+  box-shadow: var(--rp-schaduw);
+}
+.rp-hero_foto img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+/* ---------- logo's ---------- */
+
+.rp-logos {
+  padding: 0 0 120px;
+}
+.rp-logos_titel {
+  font-family: var(--rp-tekst);
+  font-size: 14px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 36px;
+}
+.rp-logos_rij {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: 30px 54px;
+}
+.rp-logos_rij img {
+  max-height: 46px;
+  width: auto;
+  max-width: 120px;
+  filter: grayscale(1);
+  mix-blend-mode: multiply;
+}
+
+/* ---------- belofte: witte kaart over een foto ---------- */
+
+.rp-belofte {
+  padding: 0 0 150px;
+}
+.rp-belofte_grid {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  align-items: center;
+}
+.rp-belofte_foto img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+}
+.rp-belofte_kaart {
+  background: var(--rp-wit);
+  padding: 70px 70px 70px 80px;
+  margin-left: -60px;
+  box-shadow: var(--rp-schaduw);
+  position: relative;
+}
+.rp-belofte_titel {
+  font-size: clamp(34px, 3.8vw, 50px);
+  margin-bottom: 26px;
+}
+.rp-belofte_kaart p + p {
+  margin-top: 16px;
+}
+
+/* ---------- gelegenheden ---------- */
+
+.rp-gelegenheden {
+  padding: 0 0 150px;
+}
+.rp-sectiekop {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 40px;
+  align-items: end;
+  margin-bottom: 60px;
+}
+.rp-sectiekop_titel {
+  font-size: clamp(38px, 4.6vw, 62px);
+}
+.rp-sectiekop_tekst {
+  max-width: 46ch;
+  color: var(--rp-zacht);
+}
+.rp-gelegenheden_lijst {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rp-lijn);
+}
+.rp-gelegenheid {
+  display: grid;
+  grid-template-columns: 70px 5fr 7fr;
+  gap: 20px;
+  align-items: baseline;
+  padding: 26px 0;
+  border-bottom: 1px solid var(--rp-lijn);
+}
+.rp-gelegenheid_nr {
+  font-family: var(--rp-kop);
+  font-style: italic;
+  color: var(--rp-zacht);
+}
+.rp-gelegenheid_titel {
+  font-size: 28px;
+}
+.rp-gelegenheid_tekst {
+  color: var(--rp-zacht);
+}
+
+/* ---------- formules ---------- */
+
+.rp-formules {
+  padding: 0 0 150px;
+}
+.rp-formules_grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 70px 50px;
+}
+.rp-formule:nth-child(3n + 2) {
+  margin-top: 90px;
+}
+.rp-formule:nth-child(3n + 3) {
+  margin-top: 30px;
+}
+.rp-formule_foto {
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.rp-formule_foto img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+.rp-formule_titel {
+  font-size: 28px;
+  margin-bottom: 10px;
+}
+.rp-formule_tekst {
+  color: var(--rp-zacht);
+}
+.rp-formule_link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 6px;
+}
+/* Formule zonder foto: een zwart vlak met een citaatachtige zin. */
+.rp-formule--zonderfoto {
+  background: var(--rp-inkt);
+  color: var(--rp-wit);
+  padding: 44px 36px;
+  align-self: start;
+}
+.rp-formule--zonderfoto .rp-formule_tekst {
+  color: var(--rp-zacht-op-zwart);
+}
+
+/* ---------- beleving: zwarte kaart ---------- */
+
+.rp-beleving {
+  padding: 0 0 150px;
+}
+.rp-beleving_grid {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  align-items: center;
+}
+.rp-beleving_kaart {
+  background: var(--rp-inkt);
+  color: var(--rp-wit);
+  padding: 80px 110px 80px 70px;
+  margin-right: -80px;
+  position: relative;
+  z-index: 2;
+  box-shadow: var(--rp-schaduw);
+}
+.rp-beleving_titel {
+  font-size: clamp(36px, 4.2vw, 56px);
+  margin-bottom: 26px;
+}
+.rp-beleving_kaart p {
+  color: var(--rp-zacht-op-zwart);
+  max-width: 44ch;
+}
+.rp-beleving_foto img {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+}
+
+/* ---------- waarom ---------- */
+
+.rp-waarom {
+  padding: 0 0 150px;
+}
+.rp-waarom_grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px 70px;
+}
+.rp-reden {
+  border-top: 2px solid var(--rp-inkt);
+  padding-top: 24px;
+}
+.rp-reden_titel {
+  font-size: 30px;
+  margin-bottom: 12px;
+}
+.rp-reden_tekst {
+  color: var(--rp-zacht);
+}
+
+/* ---------- citaat ---------- */
+
+.rp-citaat {
+  padding: 0 0 150px;
+}
+.rp-citaat_blok {
+  margin: 0 auto;
+  max-width: 860px;
+  text-align: center;
+}
+.rp-citaat_tekst {
+  font-family: var(--rp-kop);
+  font-style: italic;
+  font-size: clamp(28px, 3.4vw, 42px);
+  line-height: 1.3;
+  margin: 0;
+}
+.rp-citaat_bron {
+  margin-top: 26px;
+  font-size: 16px;
+  color: var(--rp-zacht);
+}
+.rp-citaat_bron strong {
+  color: var(--rp-inkt);
+  font-weight: 600;
+}
+
+/* ---------- werkgebied + werkwijze ---------- */
+
+.rp-werkwijze {
+  padding: 0 0 120px;
+}
+.rp-werkwijze_stappen {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  background: var(--rp-wit);
+  box-shadow: var(--rp-schaduw);
+}
+.rp-stap {
+  padding: 50px 40px;
+}
+.rp-stap + .rp-stap {
+  border-left: 1px solid var(--rp-lijn);
+}
+.rp-stap_nr {
+  font-family: var(--rp-kop);
+  font-size: 64px;
+  line-height: 1;
+  display: block;
+  margin-bottom: 20px;
+}
+.rp-stap_titel {
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+.rp-stap_tekst {
+  color: var(--rp-zacht);
+}
+.rp-werkgebied {
+  margin-top: 60px;
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  gap: 40px;
+  align-items: start;
+}
+.rp-werkgebied_titel {
+  font-size: 30px;
+}
+.rp-werkgebied_tekst {
+  color: var(--rp-zacht);
+}
+.rp-werkgebied_tekst p + p {
+  margin-top: 12px;
+}
+
+/* ---------- babbel (zoals #babbel op de live site) ---------- */
+
+.rp-babbel {
+  position: relative;
+  /* Loopt over het zwarte kader heen, net als op de live site. */
+  margin-inline: calc(-1 * var(--rp-kader));
+  background: var(--rp-inkt);
+  color: var(--rp-wit);
+  padding: 130px 0 160px;
+  overflow: hidden;
+}
+.rp-babbel_foto {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 50%;
+  height: auto;
+}
+.rp-babbel_binnen {
+  position: relative;
+}
+.rp-babbel_titel {
+  font-size: clamp(32px, 3.8vw, 52px);
+  text-align: center;
+  max-width: 16ch;
+  margin: 0 auto 100px;
+}
+.rp-babbel_kolommen {
+  display: flex;
+  gap: 120px;
+}
+.rp-babbel_kolom {
+  flex-basis: 40%;
+  max-width: 400px;
+  font-family: var(--rp-kop);
+  font-size: 27px;
+  line-height: 1.45;
+  text-wrap: balance;
+}
+.rp-babbel_kolom p + p {
+  margin-top: 28px;
+}
+.rp-babbel a:not(.rp-knop) {
+  text-underline-offset: 5px;
+  text-decoration-thickness: 1px;
+}
+.rp-babbel a:focus-visible {
+  outline-color: var(--rp-wit);
+}
+.rp-babbel_lijst {
+  list-style: none;
+  margin: 28px 0 0;
+  padding: 0;
+}
+.rp-babbel_lijst li {
+  position: relative;
+}
+.rp-babbel_lijst li::before {
+  content: '⟶';
+  position: absolute;
+  left: -40px;
+  font-family: system-ui, sans-serif;
+  font-size: 20px;
+  top: 4px;
+}
+
+/* ---------- contact (zoals #contact op de live site) ---------- */
+
+.rp-contact {
+  padding: 140px 0 80px;
+}
+.rp-contact_grid {
+  display: flex;
+  gap: 120px;
+}
+.rp-contact_tekst {
+  flex-basis: 40%;
+  max-width: 360px;
+}
+.rp-contact_titel {
+  font-size: 66px;
+  line-height: 1.1;
+  margin-bottom: 50px;
+}
+.rp-contact_titel span {
+  display: block;
+  font-size: 44px;
+}
+.rp-contact_tekst p + p {
+  margin-top: 24px;
+}
+.rp-contact_tekst a {
+  display: inline-block;
+  padding: 10px 0;
+  margin: -10px 0;
+  text-underline-offset: 4px;
+}
+.rp-contact_tekst a[href^='tel:'] {
+  text-decoration: none;
+}
+
+.rp-contactform {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.rp-contactform_veld {
+  font: inherit;
+  font-family: var(--rp-kop);
+  font-size: 22px;
+  color: var(--rp-inkt);
+  background: var(--rp-wit);
+  border: 0;
+  border-radius: 0;
+  padding: 16px 22px;
+  min-height: 64px;
+  box-shadow: 30px 30px 60px rgba(0, 0, 0, 0.1);
+}
+.rp-contactform_veld::placeholder {
+  color: var(--rp-inkt);
+  opacity: 1;
+}
+textarea.rp-contactform_veld {
+  resize: vertical;
+  min-height: 130px;
+}
+.rp-contactform_veld:focus-visible {
+  outline: 3px solid var(--rp-inkt);
+  outline-offset: 0;
+}
+.rp-contactform_knop {
+  align-self: flex-end;
+  margin-top: 12px;
+  font-size: 24px;
+  padding: 14px 30px;
+  cursor: pointer;
+}
+.rp-knop--zonderpijl::after {
+  content: none;
+}
+
+.rp-verborgen {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- footer (zoals op de live site) ---------- */
+
+.rp-footer {
+  position: relative;
+  background: var(--rp-wit);
+  box-shadow: 30px 30px 60px rgba(0, 0, 0, 0.1);
+  width: 85%;
+  max-width: 1400px;
+  margin: 60px auto 0;
+  font-size: 18px;
+  line-height: 1.2;
+}
+.rp-footer_binnen {
+  max-width: 1110px;
+  margin: 0 auto;
+  display: flex;
+  gap: 60px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 150px 50px;
+}
+.rp-footer_logo {
+  display: block;
+  color: var(--rp-inkt);
+}
+.rp-footer_logo svg {
+  display: block;
+  width: 112px;
+  height: 49px;
+}
+.rp-footer_contact a {
+  display: inline-block;
+  padding: 12px 0;
+  margin: -12px 0;
+  text-underline-offset: 3px;
+}
+.rp-footer_contact a[href^='tel:'] {
+  text-decoration: none;
+}
+.rp-footer_social {
+  display: flex;
+  gap: 8px;
+  flex-grow: 2;
+  justify-content: center;
+}
+.rp-footer_social a {
+  display: block;
+  padding: 6px;
+  color: var(--rp-inkt);
+}
+.rp-footer_social svg {
+  display: block;
+  width: 32px;
+  height: 32px;
+}
+.rp-footer_social a:hover svg {
+  opacity: 0.6;
+}
+.rp-kader {
+  padding-bottom: 60px;
+}
+
+/* ---------- bedankt ---------- */
+
+.rp-bedankt {
+  padding: 120px 0 160px;
+  text-align: center;
+}
+.rp-bedankt h1 {
+  font-size: clamp(42px, 5vw, 70px);
+  margin-bottom: 24px;
+}
+.rp-bedankt p {
+  margin-bottom: 36px;
+}
+
+/* ---------- 991 ---------- */
+
+@media (max-width: 991px) {
+  :root {
+    --rp-kader: 20px;
+  }
+  .rp-container,
+  .rp-footer_binnen {
+    padding: 0 40px;
+  }
+  .rp-header_binnen {
+    padding: 20px 40px;
+  }
+  .rp-header_logo {
+    width: 140px;
+  }
+  .rp-hero_grid,
+  .rp-belofte_grid,
+  .rp-beleving_grid,
+  .rp-sectiekop,
+  .rp-werkgebied {
+    grid-template-columns: 1fr;
+  }
+  .rp-hero_tekst {
+    margin: 0 0 50px;
+  }
+  .rp-hero_foto {
+    margin-left: 80px;
+  }
+  .rp-belofte_kaart {
+    margin: -80px 0 0 50px;
+    padding: 50px;
+  }
+  .rp-belofte_foto {
+    margin-right: 80px;
+  }
+  .rp-beleving_kaart {
+    margin: 0 50px -60px 0;
+    padding: 50px;
+  }
+  .rp-beleving_foto {
+    margin-left: 80px;
+  }
+  .rp-formules_grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .rp-formule:nth-child(n) {
+    margin-top: 0;
+  }
+  .rp-formule:nth-child(2n) {
+    margin-top: 60px;
+  }
+  .rp-babbel {
+    padding: 100px 0 120px;
+  }
+  .rp-babbel_kolommen,
+  .rp-contact_grid {
+    gap: 60px;
+  }
+  .rp-babbel_kolom {
+    font-size: 23px;
+  }
+  .rp-contact_titel {
+    font-size: 52px;
+  }
+  .rp-contact_titel span {
+    font-size: 34px;
+  }
+  .rp-footer_binnen {
+    padding: 70px;
+    flex-wrap: wrap;
+    gap: 30px 40px;
+  }
+}
+
+/* ---------- 767 ---------- */
+
+@media (max-width: 767px) {
+  :root {
+    --rp-kader: 12px;
+  }
+  html {
+    scroll-padding-top: 100px;
+  }
+  body {
+    font-size: 16px;
+  }
+  .rp-container,
+  .rp-footer_binnen {
+    padding: 0 24px;
+  }
+  .rp-header_binnen {
+    padding: 14px 20px;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+  }
+  .rp-header_logo {
+    width: 110px;
+    justify-self: center;
+  }
+  .rp-hero {
+    padding: 40px 0 80px;
+  }
+  .rp-hero_intro {
+    font-size: 18px;
+  }
+  .rp-hero_foto {
+    margin-left: 40px;
+  }
+  .rp-logos,
+  .rp-belofte,
+  .rp-gelegenheden,
+  .rp-formules,
+  .rp-beleving,
+  .rp-waarom,
+  .rp-citaat,
+  .rp-werkwijze {
+    padding-bottom: 90px;
+  }
+  .rp-logos_rij {
+    gap: 24px 34px;
+  }
+  .rp-logos_rij img {
+    max-height: 36px;
+    max-width: 90px;
+  }
+  .rp-belofte_foto {
+    margin-right: 40px;
+  }
+  .rp-belofte_kaart {
+    margin: -60px 0 0 24px;
+    padding: 36px 28px;
+  }
+  .rp-beleving_kaart {
+    margin: 0 24px -40px 0;
+    padding: 40px 28px;
+  }
+  .rp-beleving_foto {
+    margin-left: 40px;
+  }
+  .rp-gelegenheid {
+    grid-template-columns: 44px 1fr;
+    gap: 6px 12px;
+  }
+  .rp-gelegenheid_tekst {
+    grid-column: 2;
+  }
+  .rp-gelegenheid_titel {
+    font-size: 24px;
+  }
+  .rp-formules_grid,
+  .rp-waarom_grid {
+    grid-template-columns: 1fr;
+    gap: 50px;
+  }
+  .rp-formule:nth-child(n) {
+    margin-top: 0;
+  }
+  .rp-werkwijze_stappen {
+    grid-template-columns: 1fr;
+  }
+  .rp-stap {
+    padding: 36px 28px;
+  }
+  .rp-stap + .rp-stap {
+    border-left: 0;
+    border-top: 1px solid var(--rp-lijn);
+  }
+  .rp-babbel {
+    padding: 80px 0 60%;
+  }
+  .rp-babbel_foto {
+    width: 90%;
+  }
+  .rp-babbel_titel {
+    margin-bottom: 40px;
+  }
+  .rp-babbel_kolommen {
+    flex-direction: column;
+    gap: 40px;
+    padding-left: 40px;
+  }
+  .rp-babbel_kolom {
+    font-size: 21px;
+    max-width: none;
+  }
+  .rp-babbel_lijst li::before {
+    left: -32px;
+    font-size: 16px;
+  }
+  .rp-contact {
+    padding: 80px 0 40px;
+  }
+  .rp-contact_grid {
+    flex-direction: column;
+    gap: 40px;
+  }
+  .rp-contact_titel {
+    font-size: 40px;
+    margin-bottom: 24px;
+  }
+  .rp-contact_titel span {
+    font-size: 26px;
+  }
+  .rp-contactform_veld {
+    font-size: 18px;
+    min-height: 54px;
+  }
+  .rp-contactform_knop {
+    font-size: 20px;
+  }
+  .rp-footer {
+    width: auto;
+    margin: 40px 15px 0;
+    font-size: 15px;
+    line-height: 1.4;
+  }
+  .rp-footer_binnen {
+    padding: 36px 30px;
+    justify-content: flex-start;
+  }
+  .rp-footer_logo svg {
+    width: 80px;
+    height: 35px;
+  }
+  .rp-footer_social {
+    justify-content: flex-start;
+    flex-grow: 0;
+  }
+  .rp-kader {
+    padding-bottom: 15px;
+  }
+}
+
+/* ---------- 479 ---------- */
+
+@media (max-width: 479px) {
+  .rp-header_offerte {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+  .rp-header_offerte::after {
+    display: none;
+  }
+  .rp-header_logo {
+    width: 90px;
+  }
+  .rp-hero_foto,
+  .rp-beleving_foto {
+    margin-left: 0;
+  }
+  .rp-belofte_foto {
+    margin-right: 0;
+  }
+  .rp-belofte_kaart {
+    margin: -40px 12px 0;
+  }
+  .rp-beleving_kaart {
+    margin: 0 12px -30px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+  }
+}

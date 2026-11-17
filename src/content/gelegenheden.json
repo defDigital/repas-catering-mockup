@@ -1,0 +1,7 @@
+[
+  {"id": "personeelsfeest", "titel": "Personeelsfeest", "tekst": "Een avond voor je hele team, van receptie tot diner aan tafel.", "volgorde": 1},
+  {"id": "opening-jubileum", "titel": "Opening of jubileum", "tekst": "Een nieuwe vestiging of zoveel jaar bestaan. Dat vier je samen.", "volgorde": 2},
+  {"id": "congres", "titel": "Congres of seminarie", "tekst": "Ontbijt, lunch en avond in één verhaal, ook over meerdere dagen.", "volgorde": 3},
+  {"id": "productvoorstelling", "titel": "Productvoorstelling of beurs", "tekst": "Klanten ontvangen op je stand, ook drie dagen na elkaar. Denk aan het autosalon.", "volgorde": 4},
+  {"id": "klantenevent", "titel": "Klantenevent", "tekst": "Je relaties ontvangen zoals je zelf ontvangen wilt worden.", "volgorde": 5}
+]

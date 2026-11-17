@@ -1,0 +1,20 @@
+{
+  "name": "repas-catering-mockup",
+  "type": "module",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev --port 4391",
+    "build": "astro build",
+    "preview": "astro preview --port 4390",
+    "check": "node scripts/check-links.mjs",
+    "verify": "astro build && node scripts/check-links.mjs && node scripts/audit.mjs",
+    "zip": "npm run verify && node scripts/maak-zip.mjs",
+    "publiceer": "SITE_URL=https://defdigital.github.io/repas-catering-mockup npm run verify && node scripts/publiceer.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/playfair": "^5.3.0",
+    "@fontsource/playfair-display": "^5.3.0",
+    "astro": "^7.4.12"
+  }
+}

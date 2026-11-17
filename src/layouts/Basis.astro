@@ -1,0 +1,96 @@
+---
+import '@fontsource/playfair-display/400.css';
+import '@fontsource/playfair-display/400-italic.css';
+import '@fontsource-variable/playfair/opsz.css';
+import '../styles/global.css';
+import logo from '../assets/repas-logo.svg?raw';
+import logoKader from '../assets/repas-logo-kader.svg?raw';
+import iconInstagram from '../assets/iconen/instagram.svg?raw';
+import iconLinkedin from '../assets/iconen/linkedin.svg?raw';
+
+interface Props {
+  titel: string;
+  omschrijving: string;
+}
+const { titel, omschrijving } = Astro.props;
+
+const PRODUCTIE = 'https://www.repascatering.be';
+const basisUrl = Astro.site ?? new URL(PRODUCTIE);
+const schoonPad = Astro.url.pathname.replace(/index\.html$/, '').replace(/\.html$/, '');
+const canonical = new URL(schoonPad, basisUrl).href;
+const isPreview = basisUrl.hostname !== new URL(PRODUCTIE).hostname;
+
+const LIVE = 'https://www.repascatering.be';
+const nav = [
+  { label: 'Start', href: `${LIVE}/` },
+  { label: 'Bedrijfsevents', href: '/bedrijfsevents', huidig: true },
+  { label: 'Locaties', href: `${LIVE}/locaties/` },
+  { label: "Foto's", href: `${LIVE}/fotos/` },
+  { label: 'Exclusive', href: `${LIVE}/exclusive/` },
+  { label: 'Vacatures', href: `${LIVE}/vacatures/` },
+];
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{titel}</title>
+    <meta name="description" content={omschrijving} />
+    <link rel="canonical" href={canonical} />
+    {isPreview && <meta name="robots" content="noindex, nofollow" />}
+  </head>
+  <body>
+    <a class="rp-skip" href="#inhoud">Naar de inhoud</a>
+    <div class="rp-kader">
+      <header class="rp-header">
+        <div class="rp-header_binnen">
+          <a class="rp-header_offerte rp-knop rp-knop--klein" href="#contact">
+            Offerte aanvragen
+          </a>
+          <a class="rp-header_logo" href={`${LIVE}/`} aria-label="Repas Quality Catering, naar de startpagina">
+            <Fragment set:html={logo} />
+          </a>
+          <details class="rp-menu">
+            <summary class="rp-menu_knop" aria-label="Menu">
+              <span class="rp-menu_streep"></span>
+              <span class="rp-menu_streep"></span>
+              <span class="rp-menu_streep"></span>
+            </summary>
+            <nav class="rp-menu_paneel" aria-label="Hoofdmenu">
+              {nav.map((n) => (
+                <a href={n.href} aria-current={n.huidig ? 'page' : undefined}>{n.label}</a>
+              ))}
+              <a href="#contact">Contact</a>
+            </nav>
+          </details>
+        </div>
+      </header>
+
+      <main id="inhoud">
+        <slot />
+      </main>
+
+      <!-- Footer: overgenomen van de live site -->
+      <footer class="rp-footer">
+        <div class="rp-footer_binnen">
+          <a class="rp-footer_logo" href="https://www.repascatering.be/" aria-label="Repas Catering, naar de startpagina">
+            <Fragment set:html={logoKader} />
+          </a>
+          <p class="rp-footer_contact">
+            De Regenboog 5M<br />
+            2800 Mechelen<br />
+            BTW BE0892758801<br />
+            <a href="tel:+3215424344">Tel: 015 42 43 44</a><br />
+            <a href="mailto:info@repascatering.be">info@repascatering.be</a>
+          </p>
+          <div class="rp-footer_social">
+            <a href="https://www.instagram.com/repascatering/" aria-label="Instagram"><Fragment set:html={iconInstagram} /></a>
+            <a href="https://www.linkedin.com/company/repascatering" aria-label="LinkedIn"><Fragment set:html={iconLinkedin} /></a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </body>
+</html>
