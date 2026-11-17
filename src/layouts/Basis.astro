@@ -17,7 +17,8 @@ const { titel, omschrijving } = Astro.props;
 const PRODUCTIE = 'https://www.repascatering.be';
 const basisUrl = Astro.site ?? new URL(PRODUCTIE);
 const schoonPad = Astro.url.pathname.replace(/index\.html$/, '').replace(/\.html$/, '');
-const canonical = new URL(schoonPad, basisUrl).href;
+// Pad van SITE behouden (GitHub Pages draait in een submap).
+const canonical = basisUrl.href.replace(/\/$/, '') + schoonPad;
 const isPreview = basisUrl.hostname !== new URL(PRODUCTIE).hostname;
 
 const LIVE = 'https://www.repascatering.be';
